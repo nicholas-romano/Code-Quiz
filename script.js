@@ -1,5 +1,6 @@
 var time = document.querySelector("#time_remaining");
-var start_button = document.querySelector("#start_quiz");
+var content = document.querySelector("#content");
+var currentQuestion = 0;
 
  var Clock = {
 
@@ -21,8 +22,6 @@ var start_button = document.querySelector("#start_quiz");
   
   var timer = Object.create(Clock);
 
-  console.log(timer.seconds);
-
   function startQuiz() {
     
     start_button.removeEventListener("click", startQuiz);
@@ -33,19 +32,30 @@ var start_button = document.querySelector("#start_quiz");
        
       timer.tick();
       time.textContent = timer.seconds;
-      console.log(timer.seconds);
   
       if (timer.seconds === 0) {
           clearInterval(runClock);
-          console.log(timer.seconds);
+          time.textContent = timer.seconds;
           alert("Time is up!");
           timer.restartQuiz();
           time.textContent = timer.seconds;
-          console.log(timer.seconds);
       }
   
     }, 1000);
 
+   }
+
+   switch(currentQuestion) {
+    case 0:
+       content.innerHTML = '<h1>Coding Quiz Challenge</h1> ' +
+                           '<p>Press the Start button to begin</p>' +
+                           '<button id="start_quiz" type="button" class="btn btn-primary">Start Quiz</button>';
+ 
+       var start_button = document.querySelector("#start_quiz");
+ 
+       start_button.addEventListener("click", startQuiz);
+       
+    break;
    }
 
   start_button.addEventListener("click", startQuiz);
