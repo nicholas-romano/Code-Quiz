@@ -46,6 +46,10 @@ var questions = {
        this.seconds = 75;
     },
 
+    getSeconds: function() {
+        return this.seconds;
+    }
+
   };
   
   var timer = Object.create(Clock);
@@ -66,6 +70,8 @@ var questions = {
       if (end) {
         clearInterval(runClock);
         console.log("display Results");
+        var finalscore = timer.getSeconds();
+        testComplete(finalscore);
       }
   
     }, 1000);
@@ -117,7 +123,7 @@ var questions = {
    function displayResult(result) {
 
        disableAnswerButtons();
-       answer_result.innerHTML = "<hr><br><i>" + result + "</i>";
+       answer_result.innerHTML = "<hr><br>" + result;
 
        var resultMessage;
        resultMessage = setTimeout(function() {
@@ -129,11 +135,13 @@ var questions = {
 
             if (end) {
                 console.log("Display Results");
+                var finalscore = timer.getSeconds();
+                testComplete(finalscore);
             }
             else {
                 nextQuestion();
             }
-       }, 2000);
+       }, 1000);
 
    }
 
@@ -159,6 +167,21 @@ var questions = {
         else {
             return false;
         }
+   }
+
+   function testComplete(finalscore) {
+       
+        content.innerHTML = '<h2>Test Complete</h2>' +
+                            '<p>You answered ' + correctAnswers + ' questions correctly</p>' +
+                            '<p>And answered ' + incorrectAnswers + ' questions incorrectly</p>' +
+                            '<p>Your final score is: ' + finalscore + '</p>' +
+                            '<form id="test-results" class="form-inline">' +
+                                '<div class="form-group mx-sm-3 mb-2">' +
+                                  '<label for="initials" class="sr-only">Password</label>' +
+                                  '<input type="text" maxlength="3" class="form-control" id="initials">' +
+                                '</div>' +
+                                '<button type="submit" class="btn btn-primary mb-2">Save</button>' +
+                            '</form>';
    }
 
    start_button.addEventListener("click", startQuiz);

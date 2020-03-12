@@ -29,3 +29,13 @@
 .answer-choices li {
     margin-bottom: 10px;
 }
+
+#answer-result {
+    color: #ccc;
+    
+}
+
+#test-results {
+    width: 330px;
+    margin: 0 auto;
+}
