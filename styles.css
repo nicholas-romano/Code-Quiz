@@ -1,0 +1,17 @@
+#timer {
+    width: 65px;
+    float: right;
+}
+
+#view_high_scores {
+    width: 130px;
+    float: left;
+}
+
+#content {
+    text-align: center;
+}
+
+.clearfix {
+    overflow: auto;
+}
