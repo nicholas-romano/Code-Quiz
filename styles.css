@@ -15,3 +15,17 @@
 .clearfix {
     overflow: auto;
 }
+
+.question {
+    text-align: left;
+    margin-left: 40px;
+}
+
+.answer-choices {
+    list-style-type: none;
+    text-align: left;
+}
+
+.answer-choices li {
+    margin-bottom: 10px;
+}

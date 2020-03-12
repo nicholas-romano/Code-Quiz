@@ -1,6 +1,18 @@
 var time = document.querySelector("#time_remaining");
 var content = document.querySelector("#content");
+var start_button = document.querySelector("#start_quiz");
 var currentQuestion = 0;
+
+var questions = {
+    0: {
+       question: "All of the following are JavaScript datatypes except:", 
+       a1: "boolean",
+       a2: "number",
+       a3: "array",
+       a4: "unit",
+       a5: "string"
+    }
+ };
 
  var Clock = {
 
@@ -23,9 +35,9 @@ var currentQuestion = 0;
   var timer = Object.create(Clock);
 
   function startQuiz() {
-    
-    start_button.removeEventListener("click", startQuiz);
-
+ 
+    nextQuestion();
+ 
     var runClock;
  
     runClock = setInterval(function() {
@@ -38,24 +50,23 @@ var currentQuestion = 0;
           time.textContent = timer.seconds;
           alert("Time is up!");
           timer.restartQuiz();
-          time.textContent = timer.seconds;
       }
   
     }, 1000);
-
+ 
    }
 
-   switch(currentQuestion) {
-    case 0:
-       content.innerHTML = '<h1>Coding Quiz Challenge</h1> ' +
-                           '<p>Press the Start button to begin</p>' +
-                           '<button id="start_quiz" type="button" class="btn btn-primary">Start Quiz</button>';
- 
-       var start_button = document.querySelector("#start_quiz");
- 
-       start_button.addEventListener("click", startQuiz);
-       
-    break;
+   function nextQuestion() {
+
+            content.innerHTML = '<h3 class="question">' + questions[currentQuestion]['question'] + '</h3>' +
+                                '<ul class="answer-choices">' +
+                                    '<li><button id="op1" type="button" class="btn btn-primary">A. ' + questions[currentQuestion]['a1'] + '</button></li>' +
+                                    '<li><button id="op2" type="button" class="btn btn-primary">B. ' + questions[currentQuestion]['a2'] + '</button></li>' +
+                                    '<li><button id="op3" type="button" class="btn btn-primary">C. ' + questions[currentQuestion]['a3'] + '</button></li>' +
+                                    '<li><button id="op4" type="button" class="btn btn-primary">D. ' + questions[currentQuestion]['a4'] + '</button></li>' +
+                                    '<li><button id="op5" type="button" class="btn btn-primary">E. ' + questions[currentQuestion]['a5'] + '</button></li>' +
+                                '</ul>';
+        
    }
 
-  start_button.addEventListener("click", startQuiz);
+   start_button.addEventListener("click", startQuiz);
