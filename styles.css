@@ -36,6 +36,14 @@
 }
 
 #test-results {
-    width: 330px;
+    width: 300px;
     margin: 0 auto;
+}
+
+#test-results p {
+    color: red;
+}
+
+.selection {
+    margin: 10px;
 }

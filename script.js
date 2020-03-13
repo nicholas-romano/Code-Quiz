@@ -1,11 +1,23 @@
 var time = document.querySelector("#time_remaining");
+var viewHighScoresLink = document.querySelector("#view-high-scores");
 var content = document.querySelector("#content");
-var start_button = document.querySelector("#start_quiz");
+var start_button;
 var answerChosen;
 var answer_result = document.querySelector("#answer-result");
-var currentQuestion = 0;
-var correctAnswers = 0;
-var incorrectAnswers = 0;
+var currentQuestion = null;
+var correctAnswers;
+var incorrectAnswers;
+var finalscore;
+var testResultsForm;
+var initialsInput;
+var errorMessage;
+var studentName;
+var testCompleted = false;
+
+viewHighScoresLink.addEventListener("click", viewHighScores);
+
+getData();
+startScreen();
 
 var questions = {
     0: {
@@ -46,7 +58,7 @@ var questions = {
        this.seconds = 75;
     },
 
-    getSeconds: function() {
+    getScore: function() {
         return this.seconds;
     }
 
@@ -55,7 +67,8 @@ var questions = {
   var timer = Object.create(Clock);
 
   function startQuiz() {
-
+    resetData();
+    currentQuestion = 0;
     nextQuestion();
  
     var runClock;
@@ -70,17 +83,25 @@ var questions = {
       if (end) {
         clearInterval(runClock);
         console.log("display Results");
-        var finalscore = timer.getSeconds();
-        testComplete(finalscore);
+        quizComplete();
       }
   
     }, 1000);
  
    }
 
-   function nextQuestion() {
+   function startScreen() {
+            
+            content.innerHTML = '<h1>Coding Quiz Challenge</h1>' +	
+                                '<p>Press the Start button to begin</p>' +	
+                                '<button id="start_quiz" type="button" class="btn btn-primary">Start Quiz</button>';
+            start_button = document.querySelector("#start_quiz");
+            start_button.addEventListener("click", startQuiz);
+    }
 
-            content.innerHTML = '<h3 class="question">' + questions[currentQuestion]['question'] + '</h3>' +
+   function nextQuestion() {
+            if (currentQuestion !== null) {
+                content.innerHTML = '<h3 class="question">' + questions[currentQuestion]['question'] + '</h3>' +
                                 '<ul class="answer-choices">' +
                                     '<li><button id="a1" type="button" class="answer btn btn-primary">A. ' + questions[currentQuestion]['a1'] + '</button></li>' +
                                     '<li><button id="a2" type="button" class="answer btn btn-primary">B. ' + questions[currentQuestion]['a2'] + '</button></li>' +
@@ -89,6 +110,22 @@ var questions = {
                                     '<li><button id="a5" type="button" class="answer btn btn-primary">E. ' + questions[currentQuestion]['a5'] + '</button></li>' +
                                 '</ul>';
             enableAnswerButtons();
+            }
+            else {
+                startScreen();
+            }         
+   }
+
+   function resetData() {
+        studentName = "";
+        currentQuestion = null;
+        correctAnswers = 0;
+        incorrectAnswers = 0;
+        finalscore = 0;
+        answerChosen = "";
+        timer.restartQuiz();
+        time.textContent = timer.seconds;
+        testCompleted = false;
    }
 
    function recordAnswer(event) {
@@ -135,8 +172,7 @@ var questions = {
 
             if (end) {
                 console.log("Display Results");
-                var finalscore = timer.getSeconds();
-                testComplete(finalscore);
+                quizComplete();
             }
             else {
                 nextQuestion();
@@ -162,6 +198,7 @@ var questions = {
    function checkIfEnd() {
         var questionNumber = currentQuestion + 1;
         if (questionNumber > totalQuestions || timer.seconds <= 0) {
+            finalscore = timer.getScore();
             return true;
         }
         else {
@@ -169,20 +206,120 @@ var questions = {
         }
    }
 
-   function testComplete(finalscore) {
+   function handleFormSubmission(element) {
+        element.preventDefault();
+        var input = event.srcElement.elements[0].value;
+        var validInitials = validateInput(input);
+        if (validInitials) {
+            console.log("valid input");
+            studentName = input.toUpperCase();
+
+            var scoresData = getData();
+
+            var studentScore = timer.getScore();
+            scoresData[studentName] = studentScore;
+
+            setData(scoresData);
+            testCompleted = true;
+            viewHighScores();
+        }
+        else {
+            console.log("invalid input");
+            if (errorMessage === undefined) {
+                addTextToScreen(testResultsForm, "p", "Invalid input. Must be one or more letters.", "error");
+                errorMessage = document.querySelector(".error");
+            }
+            
+        }
+   }
+
+   function validateInput(input) {
+        var rmSp = input.trim();
+        var result = rmSp.search(/^[A-Za-z]+$/);
+        return (result === 0 ? true : false);
+   }
+
+   function addTextToScreen(element, tag, text, attrVal) {
+        var node = document.createElement(tag);
+        var textNode = document.createTextNode(text);
+        node.appendChild(textNode);
+        var attr = document.createAttribute("class");
+        attr.value = attrVal;
+        node.setAttributeNode(attr);
+        element.appendChild(node);
+   }
+
+   function clearErrorMessage() {
+       if (errorMessage !== undefined) {
+            errorMessage.parentNode.removeChild(errorMessage);
+            errorMessage = undefined;
+       }
+   }
+
+   function quizComplete() {
        
-        content.innerHTML = '<h2>Test Complete</h2>' +
+        content.innerHTML = '<h2>Quiz Complete</h2>' +
                             '<p>You answered ' + correctAnswers + ' questions correctly</p>' +
                             '<p>And answered ' + incorrectAnswers + ' questions incorrectly</p>' +
                             '<p>Your final score is: ' + finalscore + '</p>' +
                             '<form id="test-results" class="form-inline">' +
                                 '<div class="form-group mx-sm-3 mb-2">' +
-                                  '<label for="initials" class="sr-only">Password</label>' +
-                                  '<input type="text" maxlength="3" class="form-control" id="initials">' +
+                                  '<input required type="text" maxlength="3" class="form-control" id="initials" name="initials" placeholder="Enter Your Initials">' +
                                 '</div>' +
                                 '<button type="submit" class="btn btn-primary mb-2">Save</button>' +
                             '</form>';
+        testResultsForm = document.querySelector("#test-results");
+        testResultsForm.addEventListener("submit", handleFormSubmission);
+        initialsInput = document.querySelector("#initials");
+        initialsInput.addEventListener("change", clearErrorMessage);
    }
 
-   start_button.addEventListener("click", startQuiz);
+   function viewHighScores() {
+
+        var scoresData = getData();
+        var tableData = "";
+
+        for (var index in scoresData) {
+            tableData += '<tr>' +
+                            '<td>' + index + '</td>' +
+                            '<td>' + scoresData[index] + '</td>' +
+                          '</tr>';
+        }
+
+        content.innerHTML = '<h2>High Scores</h2>' +
+                            '<table class="table">' +
+                                '<thead class="thead-light">' +
+                                    '<tr>' +
+                                        '<th scope="col">Name</th>' +
+                                        '<th scope="col">Score</th>' +
+                                    '</tr>' +
+                                '</thead>' +
+                                '<tbody>' +
+                                    tableData +
+                                '</tbody>' +
+                            '</table>' +
+                            '<button id="go-back" type="button" class="btn btn-primary selection">Go Back</button>' +
+                            '<button id="clear-high-scores" type="button" class="btn btn-primary selection">Clear High Scores</button>';
+        var goBack = document.querySelector("#go-back");
+
+        if (testCompleted) {
+            resetData();
+            goBack.addEventListener("click", startScreen);
+        }
+        else {
+            goBack.addEventListener("click", nextQuestion);
+        }
+
+   }
+
+   function getData() {
+        var scoresData = JSON.parse(localStorage.getItem("scores"));
+        return scoresData;
+   }
+
+   function setData(scoresData) {
+        localStorage.setItem("scores", JSON.stringify(scoresData));
+   }
+
+   
    
