@@ -213,13 +213,20 @@ var questions = {
         if (validInitials) {
             console.log("valid input");
             studentName = input.toUpperCase();
+            var studentScore = timer.getScore();
 
             var scoresData = getData();
 
-            var studentScore = timer.getScore();
-            scoresData[studentName] = studentScore;
+            if (scoresData !== null) {
+                scoresData[studentName] = studentScore; 
+                setData(scoresData);
+            }
+            else {
+                var highScores = {};
+                highScores[studentName] = studentScore;
+                setData(highScores);
+            }
 
-            setData(scoresData);
             testCompleted = true;
             viewHighScores();
         }
@@ -277,13 +284,16 @@ var questions = {
    function viewHighScores() {
 
         var scoresData = getData();
+
         var tableData = "";
 
         for (var index in scoresData) {
+
             tableData += '<tr>' +
                             '<td>' + index + '</td>' +
                             '<td>' + scoresData[index] + '</td>' +
                           '</tr>';
+
         }
 
         content.innerHTML = '<h2>High Scores</h2>' +
@@ -300,7 +310,10 @@ var questions = {
                             '</table>' +
                             '<button id="go-back" type="button" class="btn btn-primary selection">Go Back</button>' +
                             '<button id="clear-high-scores" type="button" class="btn btn-primary selection">Clear High Scores</button>';
+        
         var goBack = document.querySelector("#go-back");
+        var clearScoresLink = document.querySelector("#clear-high-scores");
+        clearScoresLink.addEventListener("click", clearScores);
 
         if (testCompleted) {
             resetData();
@@ -319,6 +332,11 @@ var questions = {
 
    function setData(scoresData) {
         localStorage.setItem("scores", JSON.stringify(scoresData));
+   }
+
+   function clearScores() {
+        localStorage.clear();
+        viewHighScores();
    }
 
    
