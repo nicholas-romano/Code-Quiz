@@ -47,3 +47,12 @@
 .selection {
     margin: 10px;
 }
+
+.table.table-bordered {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.table th:first-of-type {
+    width: 50px;
+}

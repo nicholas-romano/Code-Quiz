@@ -219,6 +219,7 @@ var questions = {
 
             if (scoresData !== null) {
                 scoresData[studentName] = studentScore; 
+                scoresData = rankScores(scoresData);
                 setData(scoresData);
             }
             else {
@@ -287,19 +288,25 @@ var questions = {
 
         var tableData = "";
 
+        var rank = 1;
+
         for (var index in scoresData) {
 
             tableData += '<tr>' +
+                            '<th scope="row">' + rank + '</th>' +
                             '<td>' + index + '</td>' +
                             '<td>' + scoresData[index] + '</td>' +
-                          '</tr>';
-
+                         '</tr>';
+            rank++;
         }
 
-        content.innerHTML = '<h2>High Scores</h2>' +
-                            '<table class="table">' +
+        content.innerHTML = '<button id="go-back" type="button" class="btn btn-primary selection">Go Back</button>' +
+                            '<button id="clear-high-scores" type="button" class="btn btn-primary selection">Clear High Scores</button>' +
+                            '<h2>High Scores</h2>' +
+                            '<table class="table table-bordered">' +
                                 '<thead class="thead-light">' +
                                     '<tr>' +
+                                        '<th scope="col">Rank</th>' +
                                         '<th scope="col">Name</th>' +
                                         '<th scope="col">Score</th>' +
                                     '</tr>' +
@@ -307,9 +314,8 @@ var questions = {
                                 '<tbody>' +
                                     tableData +
                                 '</tbody>' +
-                            '</table>' +
-                            '<button id="go-back" type="button" class="btn btn-primary selection">Go Back</button>' +
-                            '<button id="clear-high-scores" type="button" class="btn btn-primary selection">Clear High Scores</button>';
+                            '</table>';
+                            
         
         var goBack = document.querySelector("#go-back");
         var clearScoresLink = document.querySelector("#clear-high-scores");
@@ -325,13 +331,36 @@ var questions = {
 
    }
 
-   function getData() {
-        var scoresData = JSON.parse(localStorage.getItem("scores"));
-        return scoresData;
+   function rankScores(data) {
+
+            var sortedArray = [];
+
+            for (var i in data) {
+                sortedArray.push(data[i]);
+            }
+            sortedArray.sort();
+            sortedArray.reverse();
+
+            var sortedScores = {};
+
+            for (var j = 0; j < sortedArray.length; j++) {
+                for (var k in data) {
+                    if (sortedArray[j] === data[k]) {
+                        sortedScores[k] = data[k];
+                    }
+                }
+            }
+
+            return sortedScores;
+            
    }
 
-   function setData(scoresData) {
-        localStorage.setItem("scores", JSON.stringify(scoresData));
+   function getData() {
+        return JSON.parse(localStorage.getItem("scores"));
+   }
+
+   function setData(data) {
+        localStorage.setItem("scores", JSON.stringify(data));
    }
 
    function clearScores() {
