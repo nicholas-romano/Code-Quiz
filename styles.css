@@ -4,7 +4,7 @@
 }
 
 #view_high_scores {
-    width: 15%;
+    width: 65px;
     float: left;
 }
 
@@ -87,4 +87,14 @@
     #answer-result {
         font-size: 10pt;
     }
+    #timer {
+        font-size: 10pt;
+        width: 55px;
+    }
+
+    #view-high-scores {
+        width: 55px;
+        font-size: 10pt;
+    }
+    
   }
