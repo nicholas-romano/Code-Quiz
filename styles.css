@@ -1,6 +1,11 @@
 #timer {
     width: 65px;
     float: right;
+    margin-top: 2px;
+}
+
+.center {
+    text-align: center;
 }
 
 #view_high_scores {
@@ -58,6 +63,8 @@
 }
 
 
+
+
 @media only screen and (max-width: 600px) {
     h1 {
         font-size: 20pt;
@@ -78,11 +85,11 @@
     .table.table-bordered td  {
         font-size: 10pt;
     }
-    input[type="text"].form-control {
-        max-width: 90%;
-    }
     input[placeholder] {
-        font-size: 10pt;
+        font-size: 12px;
+    }
+    input[type="text"] {
+        margin-left: 15px;
     }
     #answer-result {
         font-size: 10pt;

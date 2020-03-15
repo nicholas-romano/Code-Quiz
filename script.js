@@ -19,7 +19,6 @@ viewHighScoresLink.addEventListener("click", viewHighScores);
 //When application loads, get data and display start screen:
 getData();
 startScreen();
-
 //Questions List:
 var questions = {
     0: {
@@ -124,7 +123,6 @@ var questions = {
       if (end) { 
           //if the quiz has ended stop the clock and display the quiz results screen:
         clearInterval(runClock);
-        console.log("display Results");
         quizComplete();
       }
   
@@ -192,12 +190,10 @@ var questions = {
 
    function checkIfCorrect(studentAnswer, correctAnswer) {
         if (studentAnswer === correctAnswer) { //answer is correct, return true
-            console.log("Answer is correct");
             correctAnswers++; //add to correct answer total
             return true;
         }
         else { //answer is incorrect, return false
-            console.log("Answer is incorrect");
             incorrectAnswers++; //add to wrong answer total
             timer.wrongAnswerPenalty(); //subtract 15 seconds for wrong answer penalty
             return false;
@@ -219,7 +215,7 @@ var questions = {
             var end = checkIfEnd(); //check if the last question was anwered
 
             if (end) {
-                console.log("Display Results"); //if the last question was anwered, end the quiz
+                //if the last question was anwered, end the quiz
                 quizComplete();
             }
             else { //if there are still more questions, proceed to the next one:
@@ -323,11 +319,16 @@ var questions = {
                             '<p>And answered ' + incorrectAnswers + ' question(s) incorrectly</p>' +
                             '<p>Your final score is: ' + studentScore + '</p>' +
                             '<form id="test-results" class="form-inline">' +
-                                '<div class="form-group mx-sm-3 mb-2">' +
-                                  '<input required type="text" maxlength="3" class="form-control" id="initials" name="initials" placeholder="Enter Your Initials">' +
+                               '<div class="row">' +
+                                    '<div class="col-xs-12 col-sm-9 col-md-9">' +
+                                        '<input required type="text" maxlength="3" class="form-control" id="initials" name="initials" placeholder="Enter Your Initials">' +
+                                    '</div>' +
+                                    '<div class="col-xs-12 col-sm-3 col-md-3">' +
+                                        '<button type="submit" class="btn btn-primary mb-2">Save</button>' +
+                                    '</div>' +
                                 '</div>' +
-                                '<button type="submit" class="btn btn-primary mb-2">Save</button>' +
                             '</form>';
+                
         //add button events for form submission and error checking:
         testResultsForm = document.querySelector("#test-results");
         testResultsForm.addEventListener("submit", handleFormSubmission);
@@ -392,8 +393,6 @@ var questions = {
    }
 
    function rankScores(data) {
-
-            console.log(data)
 
             //create an array of scores in descending order:
             var sortedArray = [];
