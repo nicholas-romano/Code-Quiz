@@ -78,6 +78,9 @@
     .table.table-bordered td  {
         font-size: 10pt;
     }
+    input[type="text"].form-control {
+        max-width: 90%;
+    }
     input[placeholder] {
         font-size: 10pt;
     }
