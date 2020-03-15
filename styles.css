@@ -4,7 +4,7 @@
 }
 
 #view_high_scores {
-    width: 130px;
+    width: 15%;
     float: left;
 }
 
@@ -56,3 +56,32 @@
 .table th:first-of-type {
     width: 50px;
 }
+
+
+@media only screen and (max-width: 600px) {
+    h1 {
+        font-size: 20pt;
+    }
+    h2 {
+        font-size: 18pt;
+    }
+    h3 {
+        font-size: 14pt;
+    }
+    p {
+        font-size: 10pt;
+    }
+    button.btn.btn-primary {
+        font-size: 10pt;
+    }
+    .table.table-bordered th,
+    .table.table-bordered td  {
+        font-size: 10pt;
+    }
+    input[placeholder] {
+        font-size: 10pt;
+    }
+    #answer-result {
+        font-size: 10pt;
+    }
+  }
