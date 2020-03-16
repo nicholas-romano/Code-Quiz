@@ -203,7 +203,7 @@ var questions = {
    function displayResult(result) {
 
        disableAnswerButtons(); //disable answer option buttons when an answer is selected
-       answer_result.innerHTML = "<hr><br>" + result;
+       answer_result.innerHTML = "<hr><br>" + result; //set answer result: Correct!/Wrong!
 
        //display whether the answer chosen is correct or wrong for 1 second
        var resultMessage;
@@ -260,7 +260,6 @@ var questions = {
         if (validInitials) {
             //input is valid:
             studentName = input.toUpperCase(); //convert to uppercase
-            studentScore = timer.getScore(); //assign the time as the 
 
             var scoresData = getData();
 
