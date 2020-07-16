@@ -1,5 +1,7 @@
 # Code-Quiz
 
+[https://nicholas-romano.github.io/Code-Quiz/](https://nicholas-romano.github.io/Code-Quiz/)
+
 ![Code-Quiz](/images/Code-Quiz_thumbnail.png)
 
 This code quiz dynamically generates html source code for the UI based on the user's actions. The functions in the JavaScript set the variable values and send data to other functions based on that data, which then trigger certain screen displays. The only text that is always displayed is the "View High Scores" link and the Timer text.
